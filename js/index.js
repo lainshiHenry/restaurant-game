@@ -17,6 +17,7 @@ $("#buyMilk").click(function() { buyItem(player, ingredientsList[0]); });
 $("#sellFlour").click(function() { sellItem(player, ingredientsList[1]); });
 $("#buyFlour").click(function() { buyItem(player, ingredientsList[1]); });
 
+
 /* Event Message */
 function eventMessage (message) { $("#messages").text(message); }
 /**** End of Events ****/
@@ -45,7 +46,7 @@ function RestaurantObject(name, buyPrice, sellPrice, recipe) {
    this.recipe = recipe;
 };
 
-function InventoryObject(playerInventory, item) {
+function InventoryObject(item) {
    this.item = item;
    this.quantity = 0;
 }
@@ -55,30 +56,28 @@ function InventoryObject(playerInventory, item) {
 function showPlayerDetails() {
    $("#playerName").text(player.name);
    $("#playerMoney").text(player.money);
-   $("#playerInventory").html(showPlayerInventoryDetails(player.inventory));
+   $("#playerInventory").html(showPlayerInventoryDetails(player));
    //$("#recipeList").text(recipesList);
 }
 
-function showPlayerInventoryDetails(playerInventory) {
+function showPlayerInventoryDetails(player) {
    let result = "<ul>";
    
-   for(let i = 0; i < playerInventory.length; i++) {
-      result += "<li>" + playerInventory[i].item.name + ", " + playerInventory[i].quantity + "</li>";   
+   for(let i = 0; i < player.inventory.length; i++) {
+      result += "<li>" + player.inventory[i].item.name + ", " + player.inventory[i].quantity + "</li>"; 
    }
    
-   result += "</ul>";
-   return result;
+   return result += "</ul>";
 }
 
-/*function showPlayerRecipeDetails(playerRecipe) {
+/*function showPlayerRecipeDetails(player) {
    let result = "<ul>";
    
    for(let i = 0; i < playerInventory.length; i++) {
-      result += "<li>" + playerRecipe[i].name + ", " + playerRecipe[i].quantity + "</li>";
+      result += "<li>" + playerInventory[i].item.name + ", " + playerInventory[i].quantity + "</li>"; 
    }
    
-   result += "</ul>";
-   return result;
+   return result += "</ul>";
 }*/
 
 function loadPlayer() {
@@ -90,14 +89,11 @@ function loadPlayer() {
    showPlayerDetails();
 };
 
-function createNewPlayer() { player = new PlayerObject("Player", 1, 20, [], []);
-}
+function createNewPlayer() { player = new PlayerObject("Player", 1, 20, [], []); }
 
 /**** End of Player-related ****/
 
-/**** Actionable functions ****/
-function addQuantity() {}
-function removeQuantity() {}
+/**** Money-related functions ****/
 function addMoney(player, amount) { player.money += amount; }
 function removeMoney(player, amount) { if(checkMoney(player.money, amount)) {player.money -= amount;}}
 
@@ -105,8 +101,90 @@ function checkMoney(playerMoney, requiredMoney) {
    return (playerMoney > 0 && playerMoney >= requiredMoney);
 }
 
-/**** End of Actionable functions ****/
+/**** End of Money-related functions ****/
 
+/**** Selling ****/
+function sellItem( player, item ) {
+   eventMessage("Selling Item");
+   let isExistPosition = checkIfItemExists(player, item);
+   eventMessage("Checking for Item");
+   if( isExistPosition < 0 ) { 
+      eventMessage("Insufficient Quantity");
+   } else {
+      updateItem(player, item, 1, "sell");
+      eventMessage("Item Sold");
+   }
+}
+/**** End of Selling ****/
+
+/**** Buying ****/
+function buyItem( player, item ) {
+   eventMessage("Buying Item");
+   if( checkMoney(player.money, item.buyPrice) ){
+      eventMessage("Checking for Item");
+      updateItem( player, item, 1, "buy");
+      eventMessage("Item Bought");
+   } else {
+      eventMessage("Not enough money!");
+   }
+}
+/**** End of Buying ****/
+
+function checkIfItemExists(player, item) {
+   let result = -1;
+   
+   for( let i = 0; i < player.inventory.length; i++ ) {
+      if( player.inventory[i].item.name === item.name ) { result = i; }
+   }
+   return result;
+}
+
+/**** Inventory Management ****/
+/* Create, Read, Update, Delete, Check */
+
+function readInventory(player) {
+   console.log(player.inventory);
+}
+
+function createItem(player, item) {
+   if( checkIfItemExists(player, item) ) {
+      player.inventory.push(new InventoryObject(item));
+   }
+}
+
+function updateItem(player, item, quantity, action) {
+   let position = checkIfItemExists(player, item);
+   if( position < 0 ) {
+      createItem(player, item);
+      updateItem(player, item, 1, "buy");
+   } else {
+      if (action === "buy") { 
+         player.inventory[position].quantity += quantity;
+         removeMoney(player, item.buyPrice);
+      } else if (action === "sell" && player.inventory[position].quantity >= quantity) {
+         player.inventory[position].quantity -= quantity;
+         addMoney(player, item.sellPrice);
+         deleteItem(player, item);
+      } else {
+         eventMessage("Neither buy or sell");
+      }     
+   }
+}
+
+function deleteItem(player, item) {
+   let position = checkIfItemExists(player, item);
+   if( position >= 0 && player.inventory[position].quantity === 0) {
+      player.inventory.splice(position, 1);
+   }
+}
+
+
+
+/**** End of Inventory Management ****/
+
+
+
+/**** Data ****/
 function loadIngredients() {
    ingredientsList.push(new RestaurantObject("Milk", 3, 1, []));
    ingredientsList.push(new RestaurantObject("Flour", 1, 0.5, []));
@@ -115,71 +193,3 @@ function loadIngredients() {
 function loadRecipes() {
    recipesList.push(new RestaurantObject("Pancake", 1, 0, ["Egg", "Milk", "Butter"]));
 }
-
-/* Checks Functions */
-function checkQuantity(playerInventory, itemName, requiredQuanity) {
-   let result = false;
-   
-//    for(let i = 0; i < playerInventory; i++) {
-//       if( playerInventory[i].name === itemName ) {
-         
-//       }
-//    }
-   return result = true; //debugging purposes
-}
-
-function checkIfItemExists(player, item) {
-   let result = false;
-   debugger;
-   for( let i = 0; i < player.inventory.length; i++ ) {
-      if( player.inventory[i].item.name === item.name ) { result = true; }
-   }
-   return result;
-}
-/**** End of Checks Functions ****/
-
-/**** Retrival Functions ****/
-/**** End of Retrival Functions ****/
-
-/**** Selling ****/
-function sellItem( player, item ) {
-   eventMessage("Selling Item");
-   eventMessage("Checking for Item");
-   debugger;
-   if( checkIfItemExists(player, item ) ) {
-      console.log("Exists");
-   }
-      for(let i = 0; i < player.inventory.length; i++) {
-         eventMessage("Checking for Item");
-         if( player.inventory[i].item.name === item.name ) {
-            player.inventory[i].quantity--;
-            player.money += item.sellPrice;
-            eventMessage("Item Sold");
-         }
-      }
-}
-/**** End of Selling ****/
-
-/**** Buying ****/
-function buyItem( player, item ) {
-   let isExists = false;
-   eventMessage("Buying Item");
-   if( checkMoney(player.money, item.buyPrice) ){
-      eventMessage("Checking for Item");
-      for(let i = 0; i < player.inventory.length; i++) {
-         if( player.inventory[i].item.name === item.name ) {
-            removeMoney(player, item.buyPrice);
-            player.inventory[i].quantity++;
-            isExists = true;
-         }
-      }
-      if(!isExists) { 
-         player.inventory.push(new InventoryObject(player.inventory, item));
-         player.inventory[player.inventory.length - 1].quantity = 1;
-      }
-      eventMessage("Item Bought");
-   } else {
-      eventMessage("Not enough money!");
-   }
-}
-/**** End of Buying ****/
