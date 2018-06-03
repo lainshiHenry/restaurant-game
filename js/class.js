@@ -1,21 +1,20 @@
 /**** Constructors ****/
-function PlayerObject(name, level, money, inventory, recipe) {
-   this.name = name;
-   this.level = level;
-   this.money = money;
-   this.inventory = inventory;
-   this.recipe = recipe;
+function PlayerObject(name, level, money, inventory) {
+    this.name = name;
+    this.level = level;
+    this.money = money;
+    this.inventory = inventory;
 };
 
-function RestaurantObject(name, buyPrice, sellPrice, recipe) {
-   this.name = name;
-   this.buyPrice = buyPrice;
-   this.sellPrice = sellPrice;
-   this.recipe = recipe;
+function RestaurantObject(name, buyPrice, sellPrice, ingredients) {
+    this.name = name;
+    this.buyPrice = buyPrice;
+    this.sellPrice = sellPrice;
+    this.ingredients = ingredients;
 };
 
 function InventoryObject(item) {
-   this.item = item;
-   this.quantity = 0;
+    this.item = item;
+    this.quantity = 0;
 }
 /**** End of Constructors ****/
