@@ -5,10 +5,10 @@ var gameObjectList = [];
 /**** End of Game Global Variables ****/
 
 /**** Init ****/
-function loadData() {
+function loadData(playerName) {
     loadIngredients();
     loadRecipes();
-    loadPlayer();
+    loadPlayer(playerName);
 }
 /**** End of Init ****/
 

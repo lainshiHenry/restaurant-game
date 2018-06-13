@@ -1,6 +1,6 @@
 /**** Events ****/
 $(document).ready(function() {
-    loadData();
+    loadData(prompt("Enter in your Player name?"));
     timer = setInterval(showPlayerDetails, 100);
     eventMessage("Successfully loaded.");
 });

@@ -15,15 +15,15 @@ function showPlayerInventoryDetails(player) {
     return result += "</ul>";
 }
 
-function loadPlayer() {
+function loadPlayer(playerName) {
     if (player == null) {
-        createNewPlayer();
+        createNewPlayer(playerName);
     } else {
         player = new PlayerObject("Old Player", 10, 500)
     }
     showPlayerDetails();
 };
 
-function createNewPlayer() { player = new PlayerObject("Player", 1, 20, []); }
+function createNewPlayer(playerName) { player = new PlayerObject(playerName, 1, 20, []); }
 
 /**** End of Player-related ****/
