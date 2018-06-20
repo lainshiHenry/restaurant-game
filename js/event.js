@@ -7,7 +7,7 @@ $(document).ready(function() {
 
 $(".buy").click(function() { buyItem(player, readItem($(this).attr("value"))); });
 $(".sell").click(function() { sellItem(player, readItem($(this).attr("value"))); });
-$(".make").click(function() { createRecipe(player, readItem($(this).attr("value"), 1)); });
+$(".make").click(function() { createRecipe(player, readItem($(this).attr("value"))); });
 
 
 

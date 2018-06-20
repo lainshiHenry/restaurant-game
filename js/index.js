@@ -53,17 +53,24 @@ function buyItem(player, item) {
 }
 /**** End of Buying ****/
 
-function createRecipe(player, recipe, quantity) {
+function createRecipe(player, recipe) {
     eventMessage("Creating Recipe");
     let isSufficientQuantity = true;
-    console.log(recipe);
 
     for (let i = 0; i < recipe.ingredients.length; i++) {
-        // Check for quantity
-        updateItem(player, readItem(recipe.ingredients[i].name), recipe.ingredients[i].Qty, "sell");
+        if (checkIfSufficientQuantity(player, recipe.ingredients[i], recipe.ingredients[i].Qty) < 0) {
+            isSufficientQuantity = false;
+        }
     }
+    if (isSufficientQuantity) {
+        for (let i = 0; i < recipe.ingredients.length; i++) {
+            updateItem(player, readItem(recipe.ingredients[i].name), recipe.ingredients[i].Qty, "sell");
+        }
+        updateItem(player, readItem(recipe.name), 1, "buy");
+        eventMessage("Recipe Created");
+    } else { eventMessage("Insufficient Quantity"); }
 
-    updateItem(player, readItem(recipe.name), 1, "buy");
+
 }
 
 function checkIfItemExists(player, item) {
@@ -71,6 +78,18 @@ function checkIfItemExists(player, item) {
 
     for (let i = 0; i < player.inventory.length; i++) {
         if (player.inventory[i].item.name === item.name) { result = i; }
+    }
+    return result;
+}
+
+function checkIfSufficientQuantity(player, item, requiredQuantity) {
+    let result = checkIfItemExists(player, item);
+
+    if (result >= 0) {
+        if (player.inventory[result].quantity >= requiredQuantity) { result = result; } else {
+            result = -1;
+            eventMessage("Insufficient quantity");
+        }
     }
     return result;
 }
