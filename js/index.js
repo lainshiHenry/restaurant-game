@@ -7,8 +7,12 @@ var gameObjectList = [];
 /**** Init ****/
 function loadData(playerName) {
     loadIngredients();
+    displayStore();
     loadRecipes();
+    displayRecipes();
     loadPlayer(playerName);
+
+
 }
 /**** End of Init ****/
 
@@ -25,6 +29,7 @@ function checkMoney(playerMoney, requiredMoney) {
 
 /**** Selling ****/
 function sellItem(player, item) {
+    let sellQuantity = 1;
     eventMessage("Selling Item");
     debugger;
     let isExistPosition = checkIfItemExists(player, item);
@@ -32,21 +37,22 @@ function sellItem(player, item) {
     if (isExistPosition < 0) {
         eventMessage("Insufficient Quantity");
     } else {
-        updateItem(player, item, 1, "sell");
+        updateItem(player, item, sellQuantity, "sell");
         addMoney(player, item.sellPrice);
-        eventMessage("Item Sold");
+        eventMessage("Sold " + sellQuantity + " " + item.name + " for " + item.sellPrice + " coins!");
     }
 }
 /**** End of Selling ****/
 
 /**** Buying ****/
 function buyItem(player, item) {
+    let buyQuantity = 1;
     eventMessage("Buying Item");
     if (checkMoney(player.money, item.buyPrice)) {
         eventMessage("Checking for Item");
         updateItem(player, item, 1, "buy");
         removeMoney(player, item.buyPrice);
-        eventMessage("Item Bought");
+        eventMessage("Bought " + buyQuantity + " " + item.name + " for " + item.buyPrice + " coins!");
     } else {
         eventMessage("Not enough money!");
     }
@@ -54,6 +60,7 @@ function buyItem(player, item) {
 /**** End of Buying ****/
 
 function createRecipe(player, recipe) {
+    let makeQuantity = 1;
     eventMessage("Creating Recipe");
     let isSufficientQuantity = true;
 
@@ -66,8 +73,8 @@ function createRecipe(player, recipe) {
         for (let i = 0; i < recipe.ingredients.length; i++) {
             updateItem(player, readItem(recipe.ingredients[i].name), recipe.ingredients[i].Qty, "sell");
         }
-        updateItem(player, readItem(recipe.name), 1, "buy");
-        eventMessage("Recipe Created");
+        updateItem(player, readItem(recipe.name), makeQuantity, "buy");
+        eventMessage("Made " + makeQuantity + " " + recipe.name + "!");
     } else { eventMessage("Insufficient Quantity"); }
 
 

@@ -1,11 +1,25 @@
 /**** Data ****/
 function displayStore() {
-    var result;
+    let result = "";
 
-    return result;
+    for (let i = 0; i < gameObjectList.length; i++) {
+        result += "<div><button class='buy' value='" + gameObjectList[i].name + "'>Buy " + gameObjectList[i].name + "</button><button class='sell' value='" + gameObjectList[i].name + "'>Sell " + gameObjectList[i].name + "</button></div>"
+    }
+    $("#ingredientMarketplace").html(result);
 }
 
+function displayRecipes() {
+    let result = "";
 
+    /*for (let i = 0; i < gameObjectList.length; i++) {
+        result += "<div><button class='buy' value='" + gameObjectList[i].name + "'>Buy " + gameObjectList[i].name + "</button><button class='sell' value='" + gameObjectList[i].name + "'>Sell " + gameObjectList[i].name + "</button></div>"
+    }*/
+    result += "<div><button class='make' value='" + gameObjectList[8].name + "'>Make " + gameObjectList[8].name + "</button><button class='sell' value='" + gameObjectList[8].name + "'>Sell " + gameObjectList[8].name + "</button></div>"
+
+    result += "<div><button class='make' value='" + gameObjectList[9].name + "'>Make " + gameObjectList[9].name + "</button><button class='sell' value='" + gameObjectList[9].name + "'>Sell " + gameObjectList[9].name + "</button></div>"
+
+    $("#recipeMarketplace").html(result);
+}
 
 function loadIngredients() {
     gameObjectList.push(new RestaurantObject("Milk", 3, 1, []));

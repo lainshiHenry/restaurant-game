@@ -4,8 +4,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Restaurant Idle Game</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0, user-scalable=no ">
+    <style>
+        .containers {
+            font-size: 30px;
+            min-height: 300px;
+            width: 100%;
+            background: LightGray;
+            display: grid;
+            grid-template-columns: 50% 50%;
+        }
+        
+        .playerInfo {
+            position: relative;
+            top: 0px;
+            left: 0px;
+            background: white;
+        }
+        
+        #playerInventory ul {
+            display: grid;
+            grid-template-columns: 30% 30% 30%;
+        }
+        
+        #playerInventory li {
+            list-style: none;
+        }
+        
+        .marketplace {
+            font-size: 0.3em;
+            background: green;
+            display: grid;
+            grid-template-rows: 50% 50%;
+        }
+        
+        .ingredientMarketplace {
+            display: grid;
+            grid-template-columns: 50% 50%;
+        }
+        
+        @media (max-width: 350px) {}
+    </style>
     <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
 
 
@@ -13,46 +52,30 @@
 </head>
 
 <body>
-    <div id="app">
-        <div id="playerInfo">
+    <div class="containers">
+        <div class="playerInfo">
             <div>Name: <span id="playerName"></span></div>
             <div>Money: <span id="playerMoney"></span></div>
             <div>Inventory: <span id="playerInventory"></span></div>
-            <div>Recipe: <span id="recipeList"></span></div>
+            <!--<div>Recipe: <span id="recipeList"></span></div>-->
         </div>
-        <div>
-            <button class="buy" value="Milk">Buy Milk</button>
-            <button class="sell" value="Milk">Sell Milk</button>
+        <div class="marketplace">
+            <div class="ingredientMarketplace" id="ingredientMarketplace"></div>
+            <div class="recipeMarketplace" id="recipeMarketplace"></div>
         </div>
-        <div>
-            <button class="buy" value="Flour">Buy Flour</button>
-            <button class="sell" value="Flour">Sell Flour</button>
-        </div>
-        <div>
-            <button class="buy" value="Sugar">Buy Sugar</button>
-            <button class="sell" value="Sugar">Sell Sugar</button>
-        </div>
-        <div>
-            <button class="buy" value="Egg">Buy Egg</button>
-            <button class="sell" value="Egg">Sell Egg</button>
-        </div>
-        <div>
-            <button class="make" value="Pancake">Make Pancake</button>
-            <button class="sell" value="Pancake">Sell Pancake</button>
-        </div>
+    </div>
+
+    <div id="messages"></div>
 
 
-        <div id="messages"></div>
     </div>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-
+    <script src="js/data.js"></script>
     <script src="js/class.js"></script>
     <script src="js/playerClass.js"></script>
-    <script src="js/recipe.js"></script>
-    <script src="js/data.js"></script>
-    <script src="js/event.js"></script>
     <script src="js/inventory.js"></script>
     <script src="js/index.js"></script>
+    <script src="js/event.js"></script>
 
 </body>
 
